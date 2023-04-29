@@ -1,0 +1,47 @@
+name: Scheduled Image Generation
+
+on:
+  schedule:
+    - cron: '0 2 * * *' # This will run the workflow daily at 00:00 UTC
+  workflow_dispatch:
+
+jobs:
+  generate_and_commit_image:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Get current date
+      id: date
+      run: echo "::set-output name=date::$(date +'%Y-%m-%d')"
+      
+    - name: Checkout repository
+      uses: actions/checkout@v2
+      with:
+        persist-credentials: false # This prevents the GitHub token from being persisted, which is necessary when committing changes
+
+    - name: Set up Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: 3.9
+
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt # If you have any dependencies, list them in a requirements.txt file in the repository
+
+    - name: Execute Python script
+      env: 
+        API_KEY_OPENWEATHERMAP: ${{ secrets.API_KEY_OPENWEATHERMAP}}
+        GOOGLE_CALENDAR_URL: ${{ secrets.GOOGLE_CALENDAR_URL}}
+        API_KEY_JOKES: ${{ secrets.API_KEY_JOKES}}
+      run: python main.py     
+        
+    - name: Github commit and push
+      # You may pin to the exact commit or the version.
+      # uses: Smart-Transportation/push@c77535fe7a94645f7ceca83e48e6cc977620710e
+      uses: Smart-Transportation/push@v1.3
+      with:
+        # Token for the repo. Can be passed in using $\{{ secrets.GITHUB_TOKEN }}
+        # github_token:
+        message: Automatically generated on ${{ steps.date.outputs.date }}
+        branch: main

@@ -1,0 +1,6 @@
+Pillow
+requests
+chardet
+selenium
+chromedriver_autoinstaller
+pyvirtualdisplay
