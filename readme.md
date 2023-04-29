@@ -1,6 +1,6 @@
 [![Scheduled Image Generation](https://github.com/bytecube/InkyDashboard/actions/workflows/python-package-conda.yml/badge.svg)](https://github.com/bytecube/CalPi2/actions/workflows/python-package-conda.yml)
 
-# InkyDasboard
+# InkyDashboard
 
 InkyDashboard displays the most useful information for you in a simple to build eInk dashboard.
 
